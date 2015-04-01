@@ -24,7 +24,7 @@
 
         /// <summary>
         /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// the contents of this method with the code editor. (I just did - #shrekt)
         /// </summary>
         private void InitializeComponent()
         {
@@ -37,18 +37,18 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.grpSimulation = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.numMaxTemp = new System.Windows.Forms.NumericUpDown();
             this.lblMidTemp = new System.Windows.Forms.Label();
-            this.termometer1 = new System.Windows.Forms.ProgressBar();
+            this.termometer1 = new Termometer();
             this.sliderLabel = new System.Windows.Forms.Label();
             this.cookLevelBar = new System.Windows.Forms.TrackBar();
             this.btnOff = new System.Windows.Forms.Button();
             this.btnOn = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.numMaxTemp = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.grpSimulation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cookLevelBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxTemp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cookLevelBar)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -129,6 +129,19 @@
             this.label1.TabIndex = 14;
             this.label1.Text = "0";
             // 
+            // numMaxTemp
+            // 
+            this.numMaxTemp.Location = new System.Drawing.Point(418, 12);
+            this.numMaxTemp.Name = "numMaxTemp";
+            this.numMaxTemp.Size = new System.Drawing.Size(40, 20);
+            this.numMaxTemp.TabIndex = 14;
+            this.numMaxTemp.Value = new decimal(new int[] {
+            45,
+            0,
+            0,
+            0});
+            this.numMaxTemp.ValueChanged += new System.EventHandler(this.numMaxTemp_ValueChanged);
+            // 
             // lblMidTemp
             // 
             this.lblMidTemp.AutoSize = true;
@@ -191,18 +204,6 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // numMaxTemp
-            // 
-            this.numMaxTemp.Location = new System.Drawing.Point(418, 12);
-            this.numMaxTemp.Name = "numMaxTemp";
-            this.numMaxTemp.Size = new System.Drawing.Size(40, 20);
-            this.numMaxTemp.TabIndex = 14;
-            this.numMaxTemp.Value = new decimal(new int[] {
-            45,
-            0,
-            0,
-            0});
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -217,8 +218,8 @@
             this.groupBox1.PerformLayout();
             this.grpSimulation.ResumeLayout(false);
             this.grpSimulation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cookLevelBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxTemp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cookLevelBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -237,7 +238,7 @@
         private System.Windows.Forms.TrackBar cookLevelBar;
         private System.Windows.Forms.Button btnOff;
         private System.Windows.Forms.Button btnOn;
-        private System.Windows.Forms.ProgressBar termometer1;
+        private Termometer termometer1;
         private System.Windows.Forms.Label lblMidTemp;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numMaxTemp;

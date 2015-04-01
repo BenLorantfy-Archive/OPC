@@ -85,20 +85,19 @@ namespace OPC
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //On the button click initialize the new server object
+            // On the button click initialize the new server object
             server = new DaServerMgt();
 
-            //Initilize tbe connection info class
+            // Initilize the connection info class
             ConnectInfo connectInfo = new ConnectInfo();
             bool connectFailed = false;
+
             // Initialize the connect info object data
             connectInfo.LocalId = "en";
             connectInfo.KeepAliveTime = 5000;   
             connectInfo.RetryAfterConnectionError = true;
             
-            //Try the server connection
-            /*
-             * todo: uncomment this to send opc data, uncomment lower too
+            // Try the server connection
             try
             {
                 server.Connect(txtAddress.Text, 0, ref connectInfo, out connectFailed);
@@ -109,10 +108,10 @@ namespace OPC
                 MessageBox.Show("Failed to connect");
                 Console.WriteLine(ex);
             }
-            */
-
-            //Test to make sure the connection succeeded and if it did set the state, disable
-            //the connection button and enambel the disconnect button
+            
+            // Test to make sure the connection succeeded and if it did set the state, disable
+            // the connection button and enable the disconnect button
+            // also disable the simulation group if not connected
             if (!connectFailed)
             {
                 lblConnect.Text = server.ServerState.ToString();
@@ -126,8 +125,15 @@ namespace OPC
 
         }
 
-        // http://www.kepware.com/support/manuals/clientace-manual.pdf
-        // scroll down to write method
+        /*
+         * FUNCTION : Send
+         *
+         * DESCRIPTION : Sends data to OPC server device
+         *
+         * PARAMETERS : string data : data to send
+         * 
+         * RETURNS : void
+         */
         private void Send(string data)
         {
             // Declare variables
@@ -165,13 +171,16 @@ namespace OPC
             //Test to see of the server is connected and if so disconnect
             //display the new status and reste the connect and disconnect buttons
             if (server.IsConnected)
+            {
                 server.Disconnect();
+            }
+               
             lblConnect.Text = server.ServerState.ToString();
-                button2.Enabled = false;
-                button1.Enabled = true;
-                grpSimulation.Enabled = false;
-                timer1.Stop();
-                termometer1.Value = 0;
+            button2.Enabled = false;
+            button1.Enabled = true;
+            grpSimulation.Enabled = false;
+            timer1.Stop();
+            termometer1.Value = 0;
         }
 
         private void btnOn_Click(object sender, EventArgs e)
@@ -203,8 +212,7 @@ namespace OPC
                 {
                     termometer1.Value = VoltToTemp(coolToaster.SensorVoltage());
                 }
-                // uncomment this to send mcdata
-               // Send(VoltToTemp(coolToaster.SensorVoltage()).ToString());
+                Send(VoltToTemp(coolToaster.SensorVoltage()).ToString());
             }
             catch (Exception ex)
             { }
@@ -213,6 +221,11 @@ namespace OPC
         private void cookLevelBar_Scroll(object sender, EventArgs e)
         {
             coolToaster.SetMaxHeat(45 + cookLevelBar.Value * 10);
+        }
+
+        private void numMaxTemp_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateTermometer((int)numMaxTemp.Value);
         }
     }
 }

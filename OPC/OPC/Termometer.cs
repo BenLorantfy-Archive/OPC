@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace VS2010_40_CS_Example
+namespace OPC
 {
     class Termometer : ProgressBar
     {
