@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * FILE         |   Form1.cs
+ * PROJECT      |   IAD Assignmet #2
+ * DATE         |   31/03/2015
+ * AUTHORS      |   Ben Lorantfy, Grigory Kozyrev
+ * DETAILS      |   This is the main file of Toaster-OPC project. It has a toaster controls,
+ *              |   and connects to an OPC server. Every 100ms temperature data is sent to the OPC server.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,6 +43,7 @@ namespace OPC
 
         private void InitializeVoltageCoeficient()
         {
+            //Set polynom coefficient to conver voltage to temperature
             voltageCoefficient = new List<double>();
             voltageCoefficient.Add(1.978425 * Math.Pow(10, 1));
             voltageCoefficient.Add(2.001204 * Math.Pow(10, -1) * -1);
@@ -46,6 +55,7 @@ namespace OPC
             voltageCoefficient.Add(0 * Math.Pow(10, -5) * -1);
         }
 
+        //This function applies Voltage to Temperature formula, to calculate Celsius temperature from milivolts voltage
         private int VoltToTemp(double volt)
         {
             double temp = 0;
@@ -65,6 +75,7 @@ namespace OPC
 
         private void UpdateTermometer(int maxValue)
         {
+            //Update labels with thermometer data.
             lblMidTemp.Text = ((int)(maxValue / 2)).ToString();
 
             if (termometer1.Value > maxValue)
@@ -200,10 +211,9 @@ namespace OPC
         private void timer1_Tick(object sender, EventArgs e)
         {
             //Use it to get voltage from the sensor
-            double voltage = coolToaster.SensorVoltage();
-
             try
             {
+                //If new temperature is greater than thermometer max, set thermometer value to max
                 if (VoltToTemp(coolToaster.SensorVoltage()) >= termometer1.Maximum)
                 {
                     termometer1.Value = termometer1.Maximum;
@@ -212,6 +222,7 @@ namespace OPC
                 {
                     termometer1.Value = VoltToTemp(coolToaster.SensorVoltage());
                 }
+                //Send temperature data to OPC server
                 Send(VoltToTemp(coolToaster.SensorVoltage()).ToString());
             }
             catch (Exception ex)
@@ -220,6 +231,7 @@ namespace OPC
 
         private void cookLevelBar_Scroll(object sender, EventArgs e)
         {
+            //Set max heat with cook level bar
             coolToaster.SetMaxHeat(45 + cookLevelBar.Value * 10);
         }
 

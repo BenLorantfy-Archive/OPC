@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * FILE         |   Termometer.cs
+ * PROJECT      |   IAD Assignmet #2
+ * DATE         |   31/03/2015
+ * AUTHORS      |   Ben Lorantfy, Grigory Kozyrev
+ * DETAILS      |   This is the custom thermometer class. It is works exctly the same as progress bar,
+ *              |   But color changes from green in start to yellow in the middle and red at the end (with transition in between).
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,13 +34,16 @@ namespace OPC
             if (ProgressBarRenderer.IsSupported)
                 ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
             rec.Height = rec.Height - 4;
+            
             if (Value < median)
             {
+                //Make sure that color goes from green in start to yellow in the middle
                 green = 255;
                 red = (int)(255 * (Value / (double)median));
             }
             else
-            {
+            {   
+                //And then to yellow in the middle and red at the end
                 green = (int)(255 * (1 - (Value - median) / (double)(Maximum - median)));
                 red = 255;
             }

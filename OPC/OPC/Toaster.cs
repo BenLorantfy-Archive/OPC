@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * FILE         |   Toaster.cs
+ * PROJECT      |   IAD Assignmet #2
+ * DATE         |   31/03/2015
+ * AUTHORS      |   Ben Lorantfy, Grigory Kozyrev
+ * DETAILS      |   This is the toaster class, which simulates toaster object.
+ *              |   It is able to chage temperature, switch on/off state and read data from the sensor.
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +26,6 @@ namespace OPC
         private Sensor temperatureSensor;
 
         private Mutex toastMutex;
-
         private Thread t;
 
         public Toaster(int initialTemp, int initialAmbientTemp, int initialMaxHeat)
@@ -30,6 +37,7 @@ namespace OPC
             temperatureSensor = new Sensor(temp);
             toastMutex = new Mutex();
 
+            //Start Temperature Update thread
             t = new Thread(new ThreadStart(this.UpdateTemperature));
             t.Start();
         }
@@ -57,10 +65,12 @@ namespace OPC
 
         public void Destroy()
         {
+            //Destroy Temperature Update thread
             t.Abort();
             t.Join();
         }
 
+        //Returns voltage on the sensor
         public double SensorVoltage()
         {
             double voltage = 0;
@@ -76,12 +86,15 @@ namespace OPC
         {
             while (true)
             {
+                //Wait for one second
                 Thread.Sleep(1000);
 
+                //Get a mutex
                 toastMutex.WaitOne(1000);
 
                 if (On == false)
                 {
+                    //If toaster is off, change teperature to be closer to ambient
                     if (temp < ambientTemp)
                     {
                         temp += 1;
@@ -93,15 +106,19 @@ namespace OPC
                 }
                 else
                 {
+                    //Increase the temperature
                     temp += 1;
                 }
+                //Set new temperature for the sensor
                 temperatureSensor.SetTemperature(temp);
 
+                //Turn off toaster if max heat is reached
                 if (temp >= maxHeat)
                 {
                     this.TurnOff();
                 }
 
+                //Release mutex
                 toastMutex.ReleaseMutex();
             }
         }
